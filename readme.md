@@ -15,7 +15,7 @@ Work in progress /  Todo:
 --------
  * fix asynchronous loading of a whole folder
  * clean up code and comments
- * add block xml file
- * add samples
+ * add more samples
+ * QA
 
 
