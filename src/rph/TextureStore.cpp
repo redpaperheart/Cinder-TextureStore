@@ -255,7 +255,7 @@ namespace rph {
         ci::ImageSourceRef	image;
         std::string			url;
         
-        ci::app::console() << "THREAD STARTED" << std::endl;
+        ci::app::console() << "TEXTURESTORE THREAD STARTED" << std::endl;
         // run until interrupted
         while( ( ! mShouldQuit ) ) {
             if( mSurfaces.size() > 5 ) continue;
@@ -306,25 +306,24 @@ namespace rph {
                 mSurfaces.push(url, surface);
             }catch(...){}
         }
-        ci::app::console() << "THREAD STOPPED" << std::endl;
+        ci::app::console() << "TEXTURESTORE THREAD STOPPED" << std::endl;
     }
     
     void TextureStore::garbageCollect(){
 //        int s = mTextureRefs.size();
-//        for(std::map<std::string, ci::gl::TextureRef>::iterator itr=mTextureRefs.begin();itr!=mTextureRefs.end();){
-//            if(itr->second.use_count() < 2){
-//                ci::app::console() << ci::app::getElapsedSeconds() << ": removing texture '" << itr->first << "' because it is no longer in use." << std::endl;
-//                mTextureRefs.erase(itr++);
-//            } else {
-//                ++itr;
-//            }
-//        }
+        for(std::map<std::string, ci::gl::TextureRef>::iterator itr=mTextureRefs.begin();itr!=mTextureRefs.end();){
+            if(itr->second.use_count() < 2){
+                ci::app::console() << ci::app::getElapsedSeconds() << ": removing texture '" << itr->first << "' because it is no longer in use." << std::endl;
+                mTextureRefs.erase(itr++);
+            } else {
+                ++itr;
+            }
+        }
 //        ci::app::console() << ci::app::getElapsedSeconds() << "TextureStore::garbageCollect() removed: " << (s-mTextureRefs.size()) << std::endl;
     }
     
-    void TextureStore::drawAllStoredTextures(){
-        float width = 50.0f;
-        float height = 50.0f;
+    void TextureStore::drawAllStoredTextures(float width, float height){
+        
         int numOfColumns = ci::math<float>::floor( ci::app::getWindowWidth() / width );
         int count = 0;
         int rows = 0;
@@ -333,7 +332,8 @@ namespace rph {
             ci::gl::translate( (count++ % numOfColumns) * width, height * rows );
             if( count % numOfColumns == 0) rows++;
             ci::gl::draw( (*iter).second, ci::Rectf(0,0,width,height));
-            ci::gl::drawString( ci::toString( (*iter).second.use_count() ), ci::Vec2f(0,10) );
+            //ci::gl::drawString(ci::toString( (*iter).second.use_count(), vec2(0,10));
+            ci::gl::drawString( ci::toString( (*iter).second.use_count() ), ci::vec2(10,10) );
             ci::gl::popMatrices();
         }
     }

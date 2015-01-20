@@ -68,7 +68,7 @@ namespace rph {
         void garbageCollect();
         
         // helpers:
-        void drawAllStoredTextures();
+        void drawAllStoredTextures( float width = 100.0f, float height = 100.0f );
         void status();
         
       protected:
@@ -99,10 +99,10 @@ namespace rph {
     //! asynchronously loads all images from a directory
     inline std::vector<ci::gl::TextureRef>	fetchImageDirectory(const std::string &url, ci::gl::Texture::Format fmt=ci::gl::Texture::Format(), bool garbageCollectable = true){ return TextureStore::getInstance()->fetchImageDirectory(url, fmt, garbageCollectable); };
     
-    //! synchronously loads an image into a texture, stores it and returns it
+    //! synchronously loads an image into a texture, stores it and returns it immediately
     inline ci::gl::TextureRef	loadTexture(const std::string &url, ci::gl::Texture::Format fmt=ci::gl::Texture::Format()){ return TextureStore::getInstance()->load(url, fmt); };
 
-    //! asynchronously loads an image into a texture, returns immediately
+    //! asynchronously loads an image into a texture,  stores it and returns it once it's loaded
     inline ci::gl::TextureRef	fetchTexture(const std::string &url, ci::gl::Texture::Format fmt=ci::gl::Texture::Format()){ return TextureStore::getInstance()->fetch(url, fmt); };
 
 } // namespace rph
