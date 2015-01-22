@@ -188,7 +188,7 @@ namespace rph {
             // perform garbage collection to make room for new textures
             if(runGarbageCollector)garbageCollect();
 
-            ci::app::console() << ci::app::getElapsedSeconds() << ": creating Texture for '" << url << "'." << std::endl;
+            //ci::app::console() << ci::app::getElapsedSeconds() << ": creating Texture for '" << url << "'." << std::endl;
             
             ci::gl::TextureRef texRef = ci::gl::Texture::create(surface, fmt);
             mTextureRefs[ url ] = texRef;
