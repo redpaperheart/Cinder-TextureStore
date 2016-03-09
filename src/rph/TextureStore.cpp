@@ -44,7 +44,7 @@ namespace rph {
         mSurfaces.clear();
         mShouldQuit = false;
         // create and launch the thread
-        mThread = std::shared_ptr<std::thread>( new std::thread( boost::bind( &TextureStore::loadImagesThreadFn, this ) ) );
+        mThread = std::shared_ptr<std::thread>( new std::thread( std::bind( &TextureStore::loadImagesThreadFn, this ) ) );
     }
 
     TextureStore::~TextureStore(){
@@ -149,7 +149,7 @@ namespace rph {
         
         if( !ci::fs::exists( dir ) ){
             //ci::app::console() << "rph::TextureStore::loadImageDirectory - WARNING - ("<< dir << ") Folder does not Exist!" << std::endl;
-            dir = ci::app::App::getResourcePath() / dir;
+            dir = ci::app::Platform::get()->getResourcePath("") / dir;
             if( !ci::fs::exists(dir) ){
                 ci::app::console() << "rph::TextureStore::loadImageDirectory - ERROR - ("<< dir << ") Folder does not Exist!" << std::endl;
                 return textureRefs;
@@ -216,7 +216,7 @@ namespace rph {
         
         if( !ci::fs::exists( dir ) ){
             //ci::app::console() << "rph::TextureStore::loadImageDirectory - WARNING - ("<< dir << ") Folder does not Exist!" << std::endl;
-            dir = ci::app::App::getResourcePath() / dir;
+            dir = ci::app::Platform::get()->getResourcePath("") / dir;
             if( !ci::fs::exists(dir) ){
                 ci::app::console() << "rph::TextureStore::loadImageDirectory - ERROR - ("<< dir << ") Folder does not Exist!" << std::endl;
                 return textureRefs;

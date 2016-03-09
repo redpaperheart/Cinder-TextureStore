@@ -1,4 +1,4 @@
-#include "cinder/app/AppNative.h"
+#include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 
@@ -8,7 +8,7 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-class BasicSampleApp : public AppNative {
+class BasicSampleApp : public App {
   public:
 	void setup() override;
 	void update() override;
@@ -18,13 +18,15 @@ class BasicSampleApp : public AppNative {
     gl::TextureRef mFetchedTexRef;
 };
 
-void BasicSampleApp::setup(){
+void BasicSampleApp::setup()
+{
     mLoadedTexRef = rph::loadTexture("artwork/rph_isometric_blue.jpg");
 }
 
 
-void BasicSampleApp::update(){
-    while( !mFetchedTexRef ){
+void BasicSampleApp::update()
+{
+    while ( !mFetchedTexRef ) {
         mFetchedTexRef = rph::loadTexture("artwork/rph_isometric_yellow.jpg");
     }
 }
@@ -35,4 +37,4 @@ void BasicSampleApp::draw()
     rph::TextureStore::getInstance()->drawAllStoredTextures();
 }
 
-CINDER_APP_NATIVE( BasicSampleApp, RendererGl )
+CINDER_APP( BasicSampleApp, RendererGl )

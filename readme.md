@@ -1,12 +1,11 @@
 Cinder-TextureStore.
 ===========
 
-A helpful class to manage images loading/storing.
+A helpful class to manage the loading and storing of images. To be used with the [Cinder](https://libcinder.org/) framework, version 0.9.0. 
+
+Tested only on Mac/Xcode.  
 
 Based on work/code from Paul Houx.
-
-Tested with Cinder's glnext-branch on Mac/Xcode.  
-Currently most likely not compatible with Windows.
 
 
 Work in progress /  Todo:
