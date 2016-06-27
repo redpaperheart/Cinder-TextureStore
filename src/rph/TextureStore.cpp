@@ -95,7 +95,8 @@ namespace rph {
         // load texture and add to TextureList
         //ci::app::console() << "Loading Texture '" << url << "'." << std::endl;
 
-        try
+        /*
+		try
         {
             ci::ImageSourceRef img = ci::loadImage( ci::app::loadResource( url ) );
             ci::gl::TextureRef t = ci::gl::Texture::create( img, fmt );
@@ -106,7 +107,7 @@ namespace rph {
             return t;
         }
         catch(...){}
-        
+        //*/
         try
         {
             ci::ImageSourceRef img = ci::loadImage( url );
@@ -271,11 +272,12 @@ namespace rph {
             } catch(...) {}
             
             // try to load from RESOURCES (fast)
-            if(!succeeded) try {
+            /*
+			if(!succeeded) try {
                 image = ci::loadImage( ci::app::loadResource( url ) );
                 succeeded = true;
             } catch(...) {}
-            
+            //*/
             // try to load from ASSET (fast)
             if(!succeeded) try {
                 image = ci::loadImage( ci::app::loadAsset( url ) );
