@@ -94,10 +94,10 @@ namespace rph {
         
         // load texture and add to TextureList
         //ci::app::console() << "Loading Texture '" << url << "'." << std::endl;
-
+        
         try
         {
-            ci::ImageSourceRef img = ci::loadImage( ci::app::loadResource( url ) );
+            ci::ImageSourceRef img = ci::loadImage( url );
             ci::gl::TextureRef t = ci::gl::Texture::create( img, fmt );
             mTextureRefs[ url ] = t;
             if(!isGarbageCollectable){
@@ -109,7 +109,19 @@ namespace rph {
         
         try
         {
-            ci::ImageSourceRef img = ci::loadImage( url );
+            ci::ImageSourceRef img = ci::loadImage( ci::app::loadAsset( url ) );
+            ci::gl::TextureRef t = ci::gl::Texture::create( img, fmt );
+            mTextureRefs[ url ] = t;
+            if(!isGarbageCollectable){
+                mTextureRefsNonGarbageCollectable[ url ] = t;
+            }
+            return t;
+        }
+        catch(...){}
+        
+        try
+        {
+            ci::ImageSourceRef img = ci::loadImage( ci::app::loadResource( url ) );
             ci::gl::TextureRef t = ci::gl::Texture::create( img, fmt );
             mTextureRefs[ url ] = t;
             if(!isGarbageCollectable){
@@ -156,17 +168,13 @@ namespace rph {
             }
         }
         for ( ci::fs::directory_iterator it( dir ); it != ci::fs::directory_iterator(); ++it ){
-            if ( ci::fs::is_regular_file( *it ) ){
-                // -- Perhaps there is a better way to ignore hidden files
-                std::string fileName = it->path().filename().string();
-                
-                if( !( fileName.compare( ".DS_Store" ) == 0 ) ){
-                    
-                    ci::gl::TextureRef t = load( dir.string() +"/"+ fileName , fmt, isGarbageCollectable, false );
-                    textureRefs.push_back( t );
-                    
-                }
+            if ( ci::fs::is_regular_file( *it ) && hasValidFileExtension( it->path().extension() ) ){
+                    //ci::gl::TextureRef t = load( dir.string() +"/"+ fileName , fmt, isGarbageCollectable, false );
+                    textureRefs.push_back( load( it->path().c_str() , fmt, isGarbageCollectable, false ) );
             }
+//            else{
+//                ci::app::console() << "NOT loading: " <<  it->path().c_str() << std::endl;
+//            }
         }
         garbageCollect();
         return textureRefs;
@@ -227,7 +235,8 @@ namespace rph {
                 // -- Perhaps there is a better way to ignore hidden files
                 std::string fileName = it->path().filename().string();
                 
-                if( !( fileName.compare( ".DS_Store" ) == 0 ) ){
+                //if( !( fileName.compare( ".DS_Store" ) == 0) || !( fileName.compare( "Icon" ) == 0 ) ){
+                if( hasValidFileExtension( it->path().filename().extension() ) ){
                     ci::gl::TextureRef t = fetch( dir.string() +"/"+ fileName , fmt, false, false );
                     if( !t ){
                         notYetLoadedCount++;
@@ -336,6 +345,17 @@ namespace rph {
             ci::gl::drawString( ci::toString( (*iter).second.use_count() ), ci::vec2(10,10) );
             ci::gl::popMatrices();
         }
+    }
+    
+    bool TextureStore::hasValidFileExtension(ci::fs::path extension){
+        // std::vector<std::string> validFileExtension = {".png", ".jpg", ".jpeg"};
+        for(auto itr = validFileExtension.begin(); itr != validFileExtension.end(); itr++){
+            if( extension == (*itr) ){
+                //ci::app::console() << "Valid file extension: "<< (*itr) << std::endl;
+                return true;
+            }
+        }
+        return false;
     }
     
     void TextureStore::status(){

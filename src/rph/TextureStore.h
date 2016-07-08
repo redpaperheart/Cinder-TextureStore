@@ -71,8 +71,11 @@ namespace rph {
         void drawAllStoredTextures( float width = 100.0f, float height = 100.0f );
         void status();
         
+        std::vector<std::string> validFileExtension = {".png", ".jpg", ".jpeg"};
+        
       protected:
         void loadImagesThreadFn();
+        bool hasValidFileExtension(ci::fs::path extension);
         
         bool                                        mShouldQuit;
         std::shared_ptr<std::thread>                mThread;
@@ -94,10 +97,10 @@ namespace rph {
     // helper functions for easier access
     
     //! synchronously loads all images from a directory
-    inline std::vector<ci::gl::TextureRef>	loadImageDirectory(const std::string &url, ci::gl::Texture::Format fmt=ci::gl::Texture::Format(), bool garbageCollectable = true){ return TextureStore::getInstance()->loadImageDirectory(url, fmt, garbageCollectable); };
+    inline std::vector<ci::gl::TextureRef>	loadImageDirectory(const std::string &path, ci::gl::Texture::Format fmt=ci::gl::Texture::Format(), bool garbageCollectable = true){ return TextureStore::getInstance()->loadImageDirectory(path, fmt, garbageCollectable); };
     
     //! asynchronously loads all images from a directory
-    inline std::vector<ci::gl::TextureRef>	fetchImageDirectory(const std::string &url, ci::gl::Texture::Format fmt=ci::gl::Texture::Format(), bool garbageCollectable = true){ return TextureStore::getInstance()->fetchImageDirectory(url, fmt, garbageCollectable); };
+    inline std::vector<ci::gl::TextureRef>	fetchImageDirectory(const std::string &path, ci::gl::Texture::Format fmt=ci::gl::Texture::Format(), bool garbageCollectable = true){ return TextureStore::getInstance()->fetchImageDirectory(path, fmt, garbageCollectable); };
     
     //! synchronously loads an image into a texture, stores it and returns it immediately
     inline ci::gl::TextureRef	loadTexture(const std::string &url, ci::gl::Texture::Format fmt=ci::gl::Texture::Format()){ return TextureStore::getInstance()->load(url, fmt); };
