@@ -94,7 +94,6 @@ namespace rph {
         
         // load texture and add to TextureList
         //ci::app::console() << "Loading Texture '" << url << "'." << std::endl;
-        
         try
         {
             ci::ImageSourceRef img = ci::loadImage( url );
@@ -106,7 +105,7 @@ namespace rph {
             return t;
         }
         catch(...){}
-        
+
         try
         {
             ci::ImageSourceRef img = ci::loadImage( ci::app::loadAsset( url ) );
@@ -119,17 +118,18 @@ namespace rph {
         }
         catch(...){}
         
-        try
-        {
-            ci::ImageSourceRef img = ci::loadImage( ci::app::loadResource( url ) );
-            ci::gl::TextureRef t = ci::gl::Texture::create( img, fmt );
-            mTextureRefs[ url ] = t;
-            if(!isGarbageCollectable){
-                mTextureRefsNonGarbageCollectable[ url ] = t;
-            }
-            return t;
-        }
-        catch(...){}
+        // currently not windows compatible:
+//        try
+//        {
+//            ci::ImageSourceRef img = ci::loadImage( ci::app::loadResource( url ) );
+//            ci::gl::TextureRef t = ci::gl::Texture::create( img, fmt );
+//            mTextureRefs[ url ] = t;
+//            if(!isGarbageCollectable){
+//                mTextureRefsNonGarbageCollectable[ url ] = t;
+//            }
+//            return t;
+//        }
+//        catch(...){}
         
         try
         {
@@ -279,17 +279,17 @@ namespace rph {
                 succeeded = true;
             } catch(...) {}
             
-            // try to load from RESOURCES (fast)
-            if(!succeeded) try {
-                image = ci::loadImage( ci::app::loadResource( url ) );
-                succeeded = true;
-            } catch(...) {}
-            
             // try to load from ASSET (fast)
             if(!succeeded) try {
                 image = ci::loadImage( ci::app::loadAsset( url ) );
                 succeeded = true;
             } catch(...) {}
+            
+            // try to load from RESOURCES (fast) // currently not windows compatible:
+//            if(!succeeded) try {
+//                image = ci::loadImage( ci::app::loadResource( url ) );
+//                succeeded = true;
+//            } catch(...) {}
             
             // try to load from URL (slow)
             if(!succeeded) try {
