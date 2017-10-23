@@ -170,7 +170,7 @@ namespace rph {
         for ( ci::fs::directory_iterator it( dir ); it != ci::fs::directory_iterator(); ++it ){
             if ( ci::fs::is_regular_file( *it ) && hasValidFileExtension( it->path().extension() ) ){
                     //ci::gl::TextureRef t = load( dir.string() +"/"+ fileName , fmt, isGarbageCollectable, false );
-                    textureRefs.push_back( load( it->path().c_str() , fmt, isGarbageCollectable, false ) );
+                    textureRefs.push_back( load( ci::toString(it->path().c_str()) , fmt, isGarbageCollectable, false ) );
             }
 //            else{
 //                ci::app::console() << "NOT loading: " <<  it->path().c_str() << std::endl;
