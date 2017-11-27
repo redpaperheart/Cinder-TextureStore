@@ -159,6 +159,9 @@ namespace rph {
         std::vector<ci::gl::TextureRef> textureRefs;
         textureRefs.clear();
         
+        std::vector<std::string> pathsToLoad;
+        pathsToLoad.clear();
+        
         if( !ci::fs::exists( dir ) ){
             //ci::app::console() << "rph::TextureStore::loadImageDirectory - WARNING - ("<< dir << ") Folder does not Exist!" << std::endl;
             dir = ci::app::Platform::get()->getResourcePath("") / dir;
@@ -169,13 +172,18 @@ namespace rph {
         }
         for ( ci::fs::directory_iterator it( dir ); it != ci::fs::directory_iterator(); ++it ){
             if ( ci::fs::is_regular_file( *it ) && hasValidFileExtension( it->path().extension() ) ){
-                    //ci::gl::TextureRef t = load( dir.string() +"/"+ fileName , fmt, isGarbageCollectable, false );
-                    textureRefs.push_back( load( ci::toString(it->path().c_str()) , fmt, isGarbageCollectable, false ) );
+                pathsToLoad.push_back(ci::toString(it->path().c_str()));
             }
 //            else{
 //                ci::app::console() << "NOT loading: " <<  it->path().c_str() << std::endl;
 //            }
         }
+        sort( pathsToLoad.begin(), pathsToLoad.end() ); // sort alphabetically
+        for( auto it = pathsToLoad.begin(); it != pathsToLoad.end(); it++ ){
+            //ci::app::console() << "rph::TextureStore::loadImageDirectory - loading:("<< (*it) << ")" << std::endl;
+            textureRefs.push_back( load( (*it) , fmt, isGarbageCollectable, false ) );
+        }
+        
         garbageCollect();
         return textureRefs;
     }

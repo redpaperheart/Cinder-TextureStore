@@ -38,7 +38,7 @@ public:
     
     int size(){
 		std::unique_lock<std::mutex> lock( mMutex );
-		return mQueue.size();
+		return (int)mQueue.size();
 	}
     
 	void clear(){
