@@ -172,7 +172,7 @@ namespace rph {
         }
         for ( ci::fs::directory_iterator it( dir ); it != ci::fs::directory_iterator(); ++it ){
             if ( ci::fs::is_regular_file( *it ) && hasValidFileExtension( it->path().extension() ) ){
-                pathsToLoad.push_back(ci::toString(it->path().c_str()));
+                pathsToLoad.push_back( it->path().string() );
             }
 //            else{
 //                ci::app::console() << "NOT loading: " <<  it->path().c_str() << std::endl;
