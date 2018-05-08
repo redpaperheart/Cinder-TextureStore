@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <cinder>
-<block
-	name="TextureStore"
-	id="com.redpaperheart.texturestore"
-    git="git@github.com:redpaperheart/Cinder-TextureStore.git"
-	author="Red Paper Heart"
-	summary="(A)Synchronous loading and managing of images. Updated for glnext."
-    version="2.0"
-    url="https://github.com/redpaperheart/Cinder-TextureStore"
+	<block
+		name="Cinder-TextureStore"
+		id="com.redpaperheart.texturestore"
+		author="Red Paper Heart"
+		summary="(A)Synchronous loading and managing of images."
+	  version="2.0"
+	  url="https://github.com/redpaperheart/Cinder-TextureStore"
+		git="https://github.com/redpaperheart/Cinder-TextureStore.git"
 	>
-	<supports os="macosx" />
+		<supports os="macosx" />
+		<supports os="msw" />
     <includePath>src</includePath>
     <header>src/rph/ConcurrentDeque.h</header>
     <header>src/rph/ConcurrentMap.h</header>
     <header>src/rph/ConcurrentQueue.h</header>
     <header>src/rph/TextureStore.h</header>
     <source>src/rph/TextureStore.cpp</source>
-    
-</block>
+	</block>
 </cinder>
