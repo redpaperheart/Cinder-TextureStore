@@ -326,11 +326,30 @@ namespace rph {
         ci::app::console() << "TEXTURESTORE THREAD STOPPED" << std::endl;
     }
     
+	void TextureStore::releaseTexture(ci::gl::TextureRef texture) {
+		for (std::map<std::string, ci::gl::TextureRef>::iterator itr = mTextureRefsNonGarbageCollectable.begin(); itr != mTextureRefsNonGarbageCollectable.end();) {
+			//remove it
+			if (itr->second == texture) {
+				//ci::app::console() << "Releasing: "<< itr->first << std::endl;
+				mTextureRefsNonGarbageCollectable.erase(itr++);
+				//exit, there should only be 1 ref in the map
+				return;
+			}
+			else {
+				++itr;
+			}
+		}
+	}
+	void TextureStore::releaseTextures(std::vector<ci::gl::TextureRef> textures) {
+		for (std::vector<ci::gl::TextureRef>::iterator itr = textures.begin(); itr != textures.end(); itr++) {
+			releaseTexture((*itr));
+		}
+	}
     void TextureStore::garbageCollect(){
 //        int s = mTextureRefs.size();
         for(std::map<std::string, ci::gl::TextureRef>::iterator itr=mTextureRefs.begin();itr!=mTextureRefs.end();){
             if(itr->second.use_count() < 2){
-                ci::app::console() << ci::app::getElapsedSeconds() << ": removing texture '" << itr->first << "' because it is no longer in use." << std::endl;
+                //ci::app::console() << ci::app::getElapsedSeconds() << ": removing texture '" << itr->first << "' because it is no longer in use." << std::endl;
                 mTextureRefs.erase(itr++);
             } else {
                 ++itr;

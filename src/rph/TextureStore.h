@@ -60,7 +60,11 @@ namespace rph {
         //! asynchronously loads an image into a texture, returns immediately
         ci::gl::TextureRef	fetch(const std::string &url, ci::gl::Texture::Format fmt=ci::gl::Texture::Format(), bool isGarbageCollectable = true, bool runGarbageCollector = true);
         
-        
+		void releaseTexture(ci::gl::TextureRef texture); //allow garbage collection
+		//void releaseTexture(const std::string &url); //allow garbage collection (implement path based version)
+
+		void releaseTextures(std::vector<ci::gl::TextureRef> textures); //allow garbage collection
+
         //! returns TRUE if image is scheduled for loading but has not been turned into a Texture yet
         bool isLoading(const std::string &url);
         //! returns TRUE if image has been turned into a Texture
@@ -109,5 +113,9 @@ namespace rph {
 
     //! asynchronously loads an image into a texture,  stores it and returns it once it's loaded
     inline ci::gl::TextureRef	fetchTexture(const std::string &url, ci::gl::Texture::Format fmt=ci::gl::Texture::Format()){ return TextureStore::getInstance()->fetch(url, fmt); };
+
+	//! release a single texture for garbage collection
+	inline void	releaseTexture(ci::gl::TextureRef texture) { TextureStore::getInstance()->releaseTexture(texture); };
+	inline void	releaseTextures(std::vector<ci::gl::TextureRef> textures) { TextureStore::getInstance()->releaseTextures(textures); };
 
 } // namespace rph
