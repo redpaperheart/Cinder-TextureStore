@@ -78,7 +78,15 @@ namespace rph {
         void status();
         
         std::vector<std::string> validFileExtension = {".png", ".jpg", ".jpeg"};
-        
+		std::string keyForTexture(ci::gl::TextureRef ref) {
+			//loop through mTextureRefs, find texture
+			for (std::map<std::string, ci::gl::TextureRef>::iterator it = mTextureRefs.begin(); it != mTextureRefs.end(); ++it) {
+				if (it->second == ref) {
+					return it->first;
+				}
+			}
+			return "";
+		}
       protected:
         void loadImagesThreadFn();
         bool hasValidFileExtension(ci::fs::path extension);
