@@ -76,6 +76,12 @@ namespace rph {
         // helpers:
         void drawAllStoredTextures( float width = 100.0f, float height = 100.0f );
         void status();
+        int getTextureRefsCount() {
+            return mTextureRefs.size();
+        };
+        int getTextureRefsNonGarbageCollectableCount() {
+            return mTextureRefsNonGarbageCollectable.size();
+        };
         
         std::vector<std::string> validFileExtension = {".png", ".jpg", ".jpeg"};
 		std::string keyForTexture(ci::gl::TextureRef ref) {
