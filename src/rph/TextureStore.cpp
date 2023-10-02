@@ -230,6 +230,9 @@ namespace rph {
         std::vector<ci::gl::TextureRef> textureRefs;
         textureRefs.clear();
         
+        std::vector<std::string> pathsToLoad;
+        pathsToLoad.clear();
+        
         if( !ci::fs::exists( dir ) ){
             //ci::app::console() << "rph::TextureStore::loadImageDirectory - WARNING - ("<< dir << ") Folder does not Exist!" << std::endl;
             dir = ci::app::Platform::get()->getResourcePath("") / dir;
@@ -239,21 +242,38 @@ namespace rph {
             }
         }
         for ( ci::fs::directory_iterator it( dir ); it != ci::fs::directory_iterator(); ++it ){
-            if ( ci::fs::is_regular_file( *it ) ){
-                // -- Perhaps there is a better way to ignore hidden files
-                std::string fileName = it->path().filename().string();
-                
-                //if( !( fileName.compare( ".DS_Store" ) == 0) || !( fileName.compare( "Icon" ) == 0 ) ){
-                if( hasValidFileExtension( it->path().filename().extension() ) ){
-                    ci::gl::TextureRef t = fetch( dir.string() +"/"+ fileName , fmt, false, false );
-                    if( !t ){
-                        notYetLoadedCount++;
-                        break;
-                    }
-                    textureRefs.push_back( t );
-                }
+            if ( ci::fs::is_regular_file( *it ) && hasValidFileExtension( it->path().extension() ) ){
+                pathsToLoad.push_back( it->path().string() );
             }
         }
+        sort( pathsToLoad.begin(), pathsToLoad.end() ); // sort alphabetically
+        for( auto it = pathsToLoad.begin(); it != pathsToLoad.end(); it++ ){
+            //ci::app::console() << "rph::TextureStore::loadImageDirectory - loading:("<< (*it) << ")" << std::endl;
+//            textureRefs.push_back( load( (*it), fmt, isGarbageCollectable, false ) );
+            ci::gl::TextureRef t = fetch( (*it), fmt, false, false );
+            if( !t ){
+                notYetLoadedCount++;
+                break;
+            }
+            textureRefs.push_back( t );
+        }
+//        for ( ci::fs::directory_iterator it( dir ); it != ci::fs::directory_iterator(); ++it ){
+//            if ( ci::fs::is_regular_file( *it ) ){
+//                // -- Perhaps there is a better way to ignore hidden files
+//                std::string fileName = it->path().filename().string();
+//                ci::app::console() << "rph::TextureStore::fetching - "<< fileName << std::endl;
+//
+//                //if( !( fileName.compare( ".DS_Store" ) == 0) || !( fileName.compare( "Icon" ) == 0 ) ){
+//                if( hasValidFileExtension( it->path().filename().extension() ) ){
+//                    ci::gl::TextureRef t = fetch( dir.string() +"/"+ fileName , fmt, false, false );
+//                    if( !t ){
+//                        notYetLoadedCount++;
+//                        break;
+//                    }
+//                    textureRefs.push_back( t );
+//                }
+//            }
+//        }
         if( notYetLoadedCount > 0 ) {
             textureRefs.clear();
         } else {
